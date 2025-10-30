@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Physics Cure Olympiad - Check Result</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #e6f3ff, #ffffff);
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    /* === Logo Area === */
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo img {
+      width: 100px;
+      height: auto;
+    }
+
+    .logo h1 {
+      color: #0055aa;
+      margin-top: 10px;
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-shadow: 0 0 6px rgba(0, 85, 170, 0.3);
+    }
+
+    /* === Box === */
+    .box {
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
+    }
+
+    .box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      color: #0055aa;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 8px 0;
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .highlight {
+      color: #0055aa;
+      font-weight: 600;
+    }
+
+    /* === Input Field === */
+    input[type="email"] {
+      background: #f8fbff;
+      border: 1px solid #aacfff;
+      padding: 10px;
+      color: #333;
+      width: 85%;
+      border-radius: 8px;
+      outline: none;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    input[type="email"]:focus {
+      border-color: #0055aa;
+      box-shadow: 0 0 6px rgba(0, 85, 170, 0.3);
+    }
+
+    /* === Buttons === */
+    .check-btn, .back-btn {
+      background: linear-gradient(90deg, #0077cc, #00aaff);
+      border: none;
+      padding: 10px 25px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .check-btn:hover, .back-btn:hover {
+      background: linear-gradient(90deg, #00aaff, #0077cc);
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 119, 204, 0.3);
+    }
+
+    .back-btn {
+      margin-top: 15px;
+      background: #ccc;
+      color: #333;
+    }
+
+    .back-btn:hover {
+      background: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <img src="/static/logo.png" alt="Logo">
+    <h1>PHYSICS CURE OLYMPIAD</h1>
+  </div>
+
+  <div class="box">
+    {% if data %}
+      <h2>{{ data[0] }}'s Result</h2>
+      <p>Class: <span class="highlight">{{ data[1] }}</span></p>
+      <p>Marks Obtained: <span class="highlight">{{ data[2] }}</span></p>
+      <p>Full Marks: <span class="highlight">{{ data[3] }}</span></p>
+    {% else %}
+      <h2>Check Your Result</h2>
+      <form method="POST">
+        <input type="email" name="email" placeholder="Enter Your Registered Email" required><br>
+        <button class="check-btn" type="submit">Check Result</button>
+      </form>
+    {% endif %}
+  </div>
+
+</body>
+</html>

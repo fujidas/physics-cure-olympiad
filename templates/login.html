@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Physics Cure Olympiad</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(180deg, #e6f3ff, #ffffff);
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    .popup {
+      width: 350px;
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 35px 30px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+
+    .popup:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      color: #0055aa;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 85%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #aacfff;
+      border-radius: 8px;
+      background: #f8fbff;
+      color: #333;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.3s;
+      text-align: center;
+    }
+
+    input:focus {
+      border-color: #0055aa;
+      box-shadow: 0 0 6px rgba(0, 85, 170, 0.3);
+    }
+
+    button {
+      width: 90%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #0077cc, #00aaff);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #00aaff, #0077cc);
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 119, 204, 0.3);
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="popup">
+    <h2>Admin Login</h2>
+    <form method="POST">
+      <input type="text" name="username" placeholder="Enter Username" required><br>
+      <input type="password" name="password" placeholder="Enter Password" required><br>
+      <button type="submit">Login</button>
+    </form>
+    <p class="note">Authorized access only.</p>
+  </div>
+
+</body>
+</html>
