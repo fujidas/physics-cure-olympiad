@@ -146,7 +146,7 @@ def result():
         email = request.form['email']
         with sqlite3.connect(DB) as con:
             cur = con.cursor()
-            cur.execute("SELECT name, class_name, result, mock FROM students WHERE email=?", (email,))
+            cur.execute("SELECT name, class_name, mock, result FROM students WHERE email=?", (email,))
             data = cur.fetchone()
     return render_template("result.html", data=data)
 
