@@ -64,20 +64,21 @@ def register():
 
     with sqlite3.connect(DB) as con:
         cur = con.cursor()
+
         # ✅ Check if email already exists
         cur.execute("SELECT * FROM students WHERE email=?", (email,))
         existing = cur.fetchone()
         if existing:
             return "<h3 style='color:red;text-align:center;'>This email is already registered. Please use another email.</h3>"
 
-        # ✅ Otherwise, insert new record
+        # ✅ Insert new record
         cur.execute(
             "INSERT INTO students(name,email,phone,class_name,result,mock) VALUES(?,?,?,?,?,?)",
             (name, email, phone, class_name, 0, 0)
         )
         con.commit()
 
-    # ✅ Generate admit card PDF (same as before)
+    # ✅ Generate admit card PDF (new design)
     cur = con.cursor()
     cur.execute("SELECT exam_date, venue, logo FROM admin WHERE id=1")
     exam_date, venue, logo = cur.fetchone()
@@ -85,25 +86,46 @@ def register():
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
-    logo_path = os.path.join("static", logo)
 
+    # Background rounded rectangle
+    pdf.setFillColorRGB(0.9, 0.95, 1)
+    pdf.roundRect(100, 200, 400, 400, 20, stroke=0, fill=1)
+
+    # Blue left strip
+    pdf.setFillColorRGB(0.2, 0.6, 0.9)
+    pdf.rect(100, 200, 80, 400, stroke=0, fill=1)
+
+    # "Exam Admit" vertical text
+    pdf.setFillColorRGB(1, 1, 1)
+    pdf.setFont("Helvetica-Bold", 28)
+    pdf.saveState()
+    pdf.translate(130, 400)
+    pdf.rotate(90)
+    pdf.drawCentredString(0, 0, "Exam Admit")
+    pdf.restoreState()
+
+    
+
+    # Logo (optional top)
+    logo_path = os.path.join("static", logo)
     if os.path.exists(logo_path):
         img = ImageReader(logo_path)
-        pdf.drawImage(img, width/2 - 50, height - 150, width=100, height=100, mask='auto')
+        pdf.drawImage(img, 420, 640, width=100, height=100, mask='auto')
 
-    pdf.setFont("Helvetica-Bold", 22)
-    pdf.drawCentredString(width / 2, height - 180, "Talent Test Admit Card")
+    # Candidate details
+    pdf.setFillColorRGB(0, 0, 0)
+    pdf.setFont("Helvetica-Bold", 10)
+    pdf.drawString(200, 500, f"Name: {name}")
+    pdf.drawString(200, 470, f"Class: {class_name}")
+    pdf.drawString(200, 440, f"Email: {email}")
+    pdf.drawString(200, 410, f"Phone: {phone}")
+    pdf.drawString(200, 380, f"Exam Date: {exam_date}")
+    pdf.drawString(200, 350, f"Exam time: 2 hours")
+    pdf.drawString(200, 320, f"Venue: {venue}")
 
-    pdf.setFont("Helvetica", 14)
-    pdf.drawString(100, height - 230, f"Name: {name}")
-    pdf.drawString(100, height - 260, f"Class: {class_name}")
-    pdf.drawString(100, height - 290, f"Email: {email}")
-    pdf.drawString(100, height - 320, f"Phone: {phone}")
-    pdf.drawString(100, height - 360, f"Exam Date: {exam_date}")
-    pdf.drawString(100, height - 390, f"Venue: {venue}")
-
-    pdf.setFont("Helvetica-Oblique", 12)
-    pdf.drawString(100, height - 430, "Please bring this Admit Card during the exam.")
+    pdf.setFont("Helvetica-Oblique", 8)
+    pdf.setFillColorRGB(0.1, 0.1, 0.1)
+    pdf.drawString(200, 190, "Bring this Admit Card to the examination centre.")
 
     pdf.showPage()
     pdf.save()
@@ -115,6 +137,7 @@ def register():
         download_name=f"Admit_Card_{name}.pdf",
         mimetype='application/pdf'
     )
+
 # ---- RESULT PAGE ----
 @app.route('/result', methods=['GET', 'POST'])
 def result():
@@ -158,7 +181,7 @@ def admin():
     cur.execute("SELECT exam_date, venue, logo FROM admin WHERE id=1")
     exam_date, venue, logo = cur.fetchone()
 
-    # ✅ Determine the weekday (e.g., Monday, Tuesday)
+    # Determine weekday
     try:
         date_obj = datetime.strptime(exam_date, "%Y-%m-%d")
         exam_day = date_obj.strftime("%A")
