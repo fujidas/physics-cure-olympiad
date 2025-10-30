@@ -64,10 +64,20 @@ def register():
 
     with sqlite3.connect(DB) as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO students(name,email,phone,class_name,result,mock) VALUES(?,?,?,?,?,?)",
-                    (name, email, phone, class_name, 0, 0))
+        # ✅ Check if email already exists
+        cur.execute("SELECT * FROM students WHERE email=?", (email,))
+        existing = cur.fetchone()
+        if existing:
+            return "<h3 style='color:red;text-align:center;'>This email is already registered. Please use another email.</h3>"
+
+        # ✅ Otherwise, insert new record
+        cur.execute(
+            "INSERT INTO students(name,email,phone,class_name,result,mock) VALUES(?,?,?,?,?,?)",
+            (name, email, phone, class_name, 0, 0)
+        )
         con.commit()
 
+    # ✅ Generate admit card PDF (same as before)
     cur = con.cursor()
     cur.execute("SELECT exam_date, venue, logo FROM admin WHERE id=1")
     exam_date, venue, logo = cur.fetchone()
@@ -105,7 +115,6 @@ def register():
         download_name=f"Admit_Card_{name}.pdf",
         mimetype='application/pdf'
     )
-
 # ---- RESULT PAGE ----
 @app.route('/result', methods=['GET', 'POST'])
 def result():
@@ -249,4 +258,4 @@ def logout():
     return redirect('/')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
